@@ -46,7 +46,7 @@ export const searchShowsAPI = async (query: string) => {
       },
     });
 
-    return response.data.results.map((item: any) => ({
+    return response.data.results.map((item: Show) => ({
       id: item.id,
       name: item.title || item.name,
       poster_path: item.poster_path,
@@ -113,7 +113,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await fetch(url);
       const data = await response.json();
       setShows(
-        data.results.map((item: any) => ({
+        data.results.map((item: Show) => ({
           ...item,
           title: item.title || item.name,
           media_type: item.media_type || type,

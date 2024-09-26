@@ -1,11 +1,8 @@
 'use client';
-import React, { useCallback } from 'react'
-import { motion } from 'framer-motion'
 import { Bookmark } from 'lucide-react'
 import { useAppContext } from '../context/AppContext'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 interface Show {
   id: number
@@ -22,15 +19,15 @@ interface ShowGridProps {
 }
 
 const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
-  const { bookmarkedShows, toggleBookmark, searchQuery ,isLoading,} = useAppContext()
+  const { bookmarkedShows, toggleBookmark ,isLoading,} = useAppContext()
   const router = useRouter();
 
-  function handleClick( show:Show , e:any){
+  function handleClick( show:Show , e: React.MouseEvent){
     e.stopPropagation(); 
     toggleBookmark(show.id)
   }
 
-  function handleShowClick(show:Show,e:any){
+  function handleShowClick(show:Show,e: React.MouseEvent){
     e.stopPropagation();
     const path = `/show/${show.id}?type=${show.media_type}`
    
@@ -56,7 +53,7 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
           ))
         : shows.map((show) => (
             <div 
-              onClick={e => handleShowClick(show,e)}
+              onClick={(e: React.MouseEvent) => handleShowClick(show,e)}
               key={show.id}
               className="relative rounded-lg overflow-hidden cursor-pointer"
             >

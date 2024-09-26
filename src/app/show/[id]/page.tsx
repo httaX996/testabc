@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useAppContext } from '@/context/AppContext';
-import { Bookmark, Star, Clock, Calendar, ArrowLeft, Users, TrendingUp, Tv, Film } from 'lucide-react';
+import { Bookmark, Star, Clock, Calendar, ArrowLeft ,Tv, Film } from 'lucide-react';
 import Image from 'next/image';
 import axios from 'axios';
 
@@ -165,7 +165,7 @@ const ShowPage = () => {
             <div className="mb-6">
               <h2 className="text-2xl font-semibold mb-2">Cast</h2>
               <div className="flex overflow-x-auto gap-4 pb-4">
-                {showDetails.credits.cast.slice(0, 10).map((actor:any) => (
+                {showDetails.credits.cast.slice(0, 10).map((actor: { id: number; name: string; character: string; profile_path: string }) => (
                   <div key={actor.id} className="flex-shrink-0 w-24">
                     <Image
                       src={actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : '/placeholder.png'}

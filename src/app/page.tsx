@@ -1,15 +1,13 @@
 'use client';
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { motion } from 'framer-motion'
-import { Search, Settings, User } from 'lucide-react'
+import React, { useState, useEffect, useRef } from 'react'
+import { Search} from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import ShowGrid from '@/components/ShowGrid'
-import SearchDropdown from '@/components/SearchDropdown'
 import { useAppContext } from '@/context/AppContext'
 
 export default function App() {
 	const { searchQuery, setSearchQuery, fetchShows, searchShows, shows } = useAppContext()
-	const [isDropdownVisible, setIsDropdownVisible] = useState(false)
+	// const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 
 	useEffect(() => {
 		fetchShows('trending')
@@ -45,8 +43,6 @@ export default function App() {
 								className="w-full lg:w-96 md:w-64 bg-gray-800 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-600"
 								value={searchQuery}
 								onChange={handleSearch}
-								onFocus={() => setIsDropdownVisible(true)}
-								onBlur={() => setTimeout(() => setIsDropdownVisible(false), 200)}
 							/>
 							<Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
 							{/* <SearchDropdown
