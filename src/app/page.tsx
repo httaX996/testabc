@@ -35,7 +35,7 @@ export default function App() {
 			<main className="flex-1 overflow-y-auto">
 				<div className="p-6">
 					<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-						<h1 className="text-3xl font-bold mb-4 md:mb-0 bg-gradient-to-r from-purple-300 to-blue-500 text-transparent bg-clip-text">MovieMax</h1>
+						<h1 className="text-3xl font-extrabold mb-4 md:mb-0 bg-gradient-to-r from-purple-300 to-blue-500 text-transparent bg-clip-text">MovieMax</h1>
 						<div className="relative w-full md:w-auto">
 							<input
 								type="text"

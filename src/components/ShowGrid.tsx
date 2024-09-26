@@ -1,37 +1,37 @@
-'use client';
-import { Bookmark } from 'lucide-react'
-import { useAppContext } from '../context/AppContext'
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+"use client";
+import { Bookmark } from "lucide-react";
+import { useAppContext } from "../context/AppContext";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Show {
-  id: number
-  name: string
-  title: string
-  poster_path: string | null
+  id: number;
+  name: string;
+  title: string;
+  poster_path: string | null;
   original_name: string;
-  vote_average: number | null
-  media_type: string | null
+  vote_average: number | null;
+  media_type: string | null;
 }
 
 interface ShowGridProps {
-  shows: Show[],
+  shows: Show[];
 }
 
 const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
-  const { bookmarkedShows, toggleBookmark ,isLoading,} = useAppContext()
+  const { bookmarkedShows, toggleBookmark, isLoading } = useAppContext();
   const router = useRouter();
 
-  function handleClick( show:Show , e: React.MouseEvent){
-    e.stopPropagation(); 
-    toggleBookmark(show.id)
+  function handleClick(show: Show, e: React.MouseEvent) {
+    e.stopPropagation();
+    toggleBookmark(show.id);
   }
 
-  function handleShowClick(show:Show,e: React.MouseEvent){
+  function handleShowClick(show: Show, e: React.MouseEvent) {
     e.stopPropagation();
-    const path = `/show/${show.id}?type=${show.media_type}`
-   
-    router.push(path)
+    const path = `/show/${show.id}?type=${show.media_type}`;
+
+    router.push(path);
   }
 
   // Skeleton loader component
@@ -43,8 +43,18 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
         <div className="h-3 bg-gray-600 rounded w-1/4"></div>
       </div>
     </div>
-  )
-  console.log(shows)
+  );
+  console.log(shows);
+  if (!shows.length) {
+    return (
+      <div className="text-center">
+        <div className="flex items-center w-full h-full justify-center">
+        <Bookmark className="size-10 text-red-400" />
+        <h1 className="text-2xl font-semibold font-sans">Nothing here</h1>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
       {isLoading
@@ -52,8 +62,8 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
             <SkeletonItem key={index} />
           ))
         : shows.map((show) => (
-            <div 
-              onClick={(e: React.MouseEvent) => handleShowClick(show,e)}
+            <div
+              onClick={(e: React.MouseEvent) => handleShowClick(show, e)}
               key={show.id}
               className="relative rounded-lg overflow-hidden cursor-pointer"
             >
@@ -71,7 +81,9 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
                 </div>
               )}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                <h3 className="text-white text-sm font-semibold">{show.title}</h3>
+                <h3 className="text-white text-sm font-semibold">
+                  {show.title}
+                </h3>
                 {show.vote_average !== null && (
                   <p className="text-gray-300 text-xs">
                     Rating: {show?.vote_average?.toFixed(1)}
@@ -79,18 +91,22 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
                 )}
               </div>
               <button
-                onClick={e => handleClick(show,e)}
+                onClick={(e) => handleClick(show, e)}
                 className="absolute top-2 right-2 p-1 bg-gray-800 bg-opacity-50 rounded-full"
               >
                 <Bookmark
                   size={20}
-                  className={bookmarkedShows.includes(show.id) ? 'fill-red-500' : 'text-white'}
+                  className={
+                    bookmarkedShows.includes(show.id)
+                      ? "fill-red-500 text-gray-300"
+                      : "text-gray-300"
+                  }
                 />
               </button>
             </div>
           ))}
     </div>
-  )
-}
+  );
+};
 
 export default ShowGrid;
