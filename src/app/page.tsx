@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Search} from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import ShowGrid from '@/components/ShowGrid'

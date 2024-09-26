@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useAppContext } from "@/context/AppContext";
-import Link from "next/link";
+// import React, { useEffect, useState } from "react";
+// import { useAppContext } from "@/context/AppContext";
+// import Link from "next/link";
 
 interface SearchDropdownProps {
   isVisible: boolean;
@@ -14,27 +14,27 @@ interface Show {
   media_type: string | null;
 }
 const SearchDropdown: React.FC<SearchDropdownProps> = ({ isVisible }) => {
-  const { searchQuery, searchShowsAPI } = useAppContext();
-  const [data, setData] = useState<Show[]>([]);
+  // const { searchQuery } = useAppContext();
+  // const [data, setData] = useState<Show[]>([]);
 
-  useEffect(() => {
-    // if (searchQuery) {
-    //   searchShowsAPI(searchQuery)
-    //     .then((data) => {
-    //       setData(data:any);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
-  }, [searchQuery]);
-  if (!isVisible || data.length === 0) {
-    return null;
-  }
+  // useEffect(() => {
+  //   // if (searchQuery) {
+  //   //   searchShowsAPI(searchQuery)
+  //   //     .then((data) => {
+  //   //       setData(data:any);
+  //   //     })
+  //   //     .catch((error) => {
+  //   //       console.error(error);
+  //   //     });
+  //   // }
+  // }, [searchQuery]);
+  // if (!isVisible || data.length === 0) {
+  //   return null;
+  // }
 
   return (
     <div className="absolute z-10 w-full bg-gray-800 rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto">
-      {data.map((show) => (
+      {/* {data.map((show) => (
         <Link
           href={`/show/${show.id}?type=${show.media_type}`}
           key={show.id}
@@ -47,7 +47,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({ isVisible }) => {
             </div>
           )}
         </Link>
-      ))}
+      ))} */}
     </div>
   );
 };
