@@ -44,24 +44,23 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
       </div>
     </div>
   );
-  console.log(shows);
-  if (!shows.length) {
+
+  function EmptyBookmark() {
     return (
-      <div className="text-center">
-        <div className="flex items-center w-full h-full justify-center">
+      <div className="text-center col-span-full place-items-center">
+        <div className="flex items-center w-full h-full justify-center mt-10">
         <Bookmark className="size-10 text-red-400" />
         <h1 className="text-2xl font-semibold font-sans">Nothing here</h1>
         </div>
       </div>
-    );
-  }
+    );}
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
       {isLoading
         ? Array.from({ length: 12 }).map((_, index) => (
             <SkeletonItem key={index} />
           ))
-        : shows.map((show) => (
+        : !shows.length ? <EmptyBookmark/> : (shows.map((show) => (
             <div
               onClick={(e: React.MouseEvent) => handleShowClick(show, e)}
               key={show.id}
@@ -104,7 +103,7 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
                 />
               </button>
             </div>
-          ))}
+          )))}
     </div>
   );
 };
