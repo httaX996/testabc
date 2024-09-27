@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation";
 
 interface Show {
   id: number;
-  name: string;
   title: string;
-  poster_path: string | null;
+  name: string;
   original_name: string;
-  vote_average: number | null;
-  media_type: string | null;
+  poster_path: string | null;
+  vote_average: number;
+  media_type: "movie" | "tv";
 }
+
 
 interface ShowGridProps {
   shows: Show[];
@@ -24,16 +25,15 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
 
   function handleClick(show: Show, e: React.MouseEvent) {
     e.stopPropagation();
-    toggleBookmark(show.id);
+    toggleBookmark(show);
   }
-
   function handleShowClick(show: Show, e: React.MouseEvent) {
     e.stopPropagation();
     const path = `/show/${show.id}?type=${show.media_type}`;
 
     router.push(path);
   }
-
+  
   // Skeleton loader component
   const SkeletonItem = () => (
     <div className="relative rounded-lg overflow-hidden bg-gray-700 animate-pulse px-8 gap-4">
@@ -64,15 +64,15 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
             <div
               onClick={(e: React.MouseEvent) => handleShowClick(show, e)}
               key={show.id}
-              className="relative rounded-lg overflow-hidden cursor-pointer"
+              className="relative duration-150 hover:opacity-70 rounded-lg overflow-hidden cursor-pointer"
             >
               {show.poster_path ? (
                 <Image
                   src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-                  alt={show.name}
+                  alt={show.title}
                   width={500}
                   height={750}
-                  className="w-full h-auto"
+                  className="w-full h-auto duration-150 hover:scale-105 object-cover"
                 />
               ) : (
                 <div className="w-full h-0 pb-[150%] bg-gray-700 flex items-center justify-center">
@@ -95,10 +95,9 @@ const ShowGrid: React.FC<ShowGridProps> = ({ shows }) => {
               >
                 <Bookmark
                   size={20}
-                  className={
-                    bookmarkedShows.includes(show.id)
-                      ? "fill-red-500 text-gray-300"
-                      : "text-gray-300"
+                  className={bookmarkedShows.some(bookmark => bookmark.id === show.id)
+                    ? "fill-red-500 text-gray-300"
+                    : "text-gray-300"
                   }
                 />
               </button>

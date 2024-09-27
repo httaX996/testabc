@@ -7,17 +7,18 @@ interface Show {
   title: string;
   name: string;
   original_name: string;
-  poster_path: string;
+  poster_path: string | null;
   vote_average: number;
   media_type: "movie" | "tv";
 }
 
 interface AppContextType {
   shows: Show[];
-  bookmarkedShows: number[];
+  bookmarkedShows: Show[];
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  toggleBookmark: (showId: number) => void;
+  toggleBookmark: (show: Show) => void;
+  setBookmarkedShows: (bookmarkedShows: Show[]) => void;
   fetchShows: (type: "movie" | "tv" | "trending") => Promise<void>;
   fetchBookmarkedShows: () => void;
   searchShows: (query: string) => Promise<void>;
@@ -61,7 +62,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [shows, setShows] = useState<Show[]>([]);
-  const [bookmarkedShows, setBookmarkedShows] = useState<number[]>([]);
+  const [bookmarkedShows, setBookmarkedShows] = useState<Show[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -81,13 +82,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const fetchBookmarkedShows = async () => {
     setIsLoading(true);
-    const bookmarkedShows = JSON.parse(
-      localStorage.getItem("bookmarkedShows") || "[]"
-    );
-    const bookmarkedShowsData = shows.filter((show) =>
-      bookmarkedShows.includes(show.id)
-    );
-    setShows(bookmarkedShowsData);
+    const getBookmarkedShows = localStorage.getItem("bookmarkedShows");
+    const data = getBookmarkedShows ? JSON.parse(getBookmarkedShows) : [];
+    setBookmarkedShows(data);
+    setShows(data);
     setIsLoading(false);
   };
 
@@ -124,12 +122,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     } finally {
       setIsLoading(false);
     }
+    setBookmarkedShows(JSON.parse(localStorage.getItem("bookmarkedShows") || "[]"));
   };
 
-  const toggleBookmark = (showId: number) => {
-    const updatedBookmarkedShows = bookmarkedShows.includes(showId)
-      ? bookmarkedShows.filter((id) => id !== showId)
-      : [...bookmarkedShows, showId];
+  const toggleBookmark = (show: Show) => { // Change parameter to Show object
+    const updatedBookmarkedShows = bookmarkedShows.some((bookmarkedShow) => bookmarkedShow.id === show.id)
+      ? bookmarkedShows.filter((bookmarkedShow) => bookmarkedShow.id !== show.id)
+      : [...bookmarkedShows, show];
     setBookmarkedShows(updatedBookmarkedShows);
     localStorage.setItem(
       "bookmarkedShows",
@@ -137,8 +136,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
+
   useEffect(() => {
     fetchShows("trending");
+    setBookmarkedShows(JSON.parse(localStorage.getItem("bookmarkedShows") || "[]"));
   }, []);
 
   return (
@@ -154,6 +155,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         searchShows,
         fetchShows,
         searchShowsAPI,
+        setBookmarkedShows
       }}
     >
       {children}
