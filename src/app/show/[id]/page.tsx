@@ -14,15 +14,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import axios from "axios";
-interface Show {
-  id: number;
-  title: string;
-  name: string;
-  original_name: string;
-  poster_path: string | null;
-  vote_average: number;
-  media_type: "movie" | "tv";
-}
 interface ShowDetails {
   id: number;
   name: string;
