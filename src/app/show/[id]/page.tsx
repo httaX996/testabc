@@ -163,7 +163,7 @@ const ShowPage = () => {
               </h1>
               {showDetails.tagline && (
                 <p className="text-xl text-gray-400 mb-4 italic">
-                  "{showDetails.tagline}"
+                  &quot;{showDetails.tagline}&quot;
                 </p>
               )}
               <div className="flex flex-wrap items-center gap-4 mb-6">
