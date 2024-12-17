@@ -11,7 +11,7 @@ export default function App() {
 
 	useEffect(() => {
 		fetchShows('trending');
-	}, [fetchShows])
+	}, [])
 
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchQuery(e.target.value)
