@@ -51,7 +51,7 @@ export default function App() {
 						</div>
 					</div>
 					<div className="flex flex-wrap gap-2 mb-6">
-						{['TV Shows', 'Movies', 'Trending'].map((filter) => (
+						{['TV Shows', 'Movie', 'Trending'].map((filter) => (
 							<button
 								key={filter}
 								className="bg-gray-800 hover:bg-gray-700 rounded-full px-4 py-2 text-sm"

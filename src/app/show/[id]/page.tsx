@@ -14,8 +14,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import axios from "axios";
-interface ShowDetails {
+import ShowEp from "@/components/ShowEp";
+export interface ShowDetails {
   id: number;
+  imdb_id: string;
   name: string;
   original_name: string;
   title: string;
@@ -33,14 +35,22 @@ interface ShowDetails {
   media_type: "movie" | "tv";
   status: string;
   tagline: string;
+  seasons: {
+    id: number;
+    name: string;
+    poster_path: string;
+    air_date: string;
+    episode_count: number;
+    season_number: number;
+    overview: string;
+  }[];
   crew: { id: number; name: string; job: string }[];
   credits: {
     cast: {
       id: number;
       name: string;
       character: string;
-      profile_path: 
-      string;
+      profile_path: string;
     }[];
   };
   cast: { id: number; name: string; character: string; profile_path: string }[];
@@ -114,58 +124,63 @@ const ShowPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-gray-950">
-      <div className="min-h-screen bg-gray-950 text-white w-full lg:px-5 lg:w-4/5 mx-auto">
+      <div className="min-h-screen bg-gray-950 text-white w-full lg:px-5 lg:w-4/5 mx-auto relative">
         <button
           onClick={handleBack}
-          className="fixed top-4 left-4 bg-zinc-700/40 backdrop-blur hover:bg-gray-500 p-2 size-10 rounded-full z-20 transition duration-300 ease-in-out"
+          className="fixed top-6 left-6 bg-zinc-700/40 backdrop-blur hover:bg-gray-500 p-2.5 size-11 rounded-full z-20 transition duration-300 ease-in-out group"
         >
-          <ArrowLeft className="text-white" size={24} />
+          <ArrowLeft className="text-white group-hover:-translate-x-0.5 transition-transform" size={24} />
         </button>
-        <div className="relative h-[33vh] sm:h-[40vh] md:h-[50vh] lg:h-[60vh]">
+        <div className="relative h-[40vh] sm:h-[45vh] md:h-[55vh] lg:h-[70vh]">
           <Image
             src={`https://image.tmdb.org/t/p/original${showDetails.backdrop_path}`}
             alt={showDetails.name || showDetails.title}
             layout="fill"
             objectFit="cover"
-            className="opacity-50"
+            className="opacity-40"
+            priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/80 to-gray-950/20" />
         </div>
         <div className="container mx-auto px-4 pb-8 -mt-32 relative z-10">
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full md:w-1/3 lg:w-1/4">
-              <Image
-                src={`https://image.tmdb.org/t/p/w500${showDetails.poster_path}`}
-                alt={showDetails.name || showDetails.title}
-                width={300}
-                height={550}
-                className="rounded-lg shadow-lg mx-auto"
-              />
+              <div className="relative group">
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500${showDetails.poster_path}`}
+                  alt={showDetails.name || showDetails.title}
+                  width={300}
+                  height={550}
+                  className="rounded-xl shadow-2xl mx-auto transition duration-300 group-hover:shadow-blue-500/20 group-hover:shadow-2xl"
+                  priority
+                />
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-gray-950/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300" />
+              </div>
             </div>
             <div className="w-full md:w-2/3 lg:w-3/4">
-              <h1 className="text-4xl font-bold mb-2">
+              <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                 {showDetails.name || showDetails.title}
               </h1>
               {showDetails.tagline && (
                 <p className="text-xl text-gray-400 mb-4 italic">
-                  {showDetails.tagline}
+                  "{showDetails.tagline}"
                 </p>
               )}
               <div className="flex flex-wrap items-center gap-4 mb-6">
-                <div className="flex items-center bg-gray-800 rounded-full px-3 py-1">
-                  <Star className="text-yellow-400 mr-1" size={16} />
+                <div className="flex items-center bg-gray-800/60 backdrop-blur rounded-full px-4 py-1.5 hover:bg-gray-700 transition duration-300">
+                  <Star className="text-yellow-400 mr-2" size={18} />
                   <span>{showDetails.vote_average.toFixed(1)}</span>
                 </div>
-                <div className="flex items-center bg-gray-800 rounded-full px-3 py-1">
-                  <Clock className="mr-1" size={16} />
+                <div className="flex items-center bg-gray-800/60 backdrop-blur rounded-full px-4 py-1.5 hover:bg-gray-700 transition duration-300">
+                  <Clock className="mr-2" size={18} />
                   <span>
                     {isMovie
                       ? `${showDetails.runtime} min`
                       : `${showDetails.episode_run_time?.[0] || "N/A"} min/ep`}
                   </span>
                 </div>
-                <div className="flex items-center bg-gray-800 rounded-full px-3 py-1">
-                  <Calendar className="mr-1" size={16} />
+                <div className="flex items-center bg-gray-800/60 backdrop-blur rounded-full px-4 py-1.5 hover:bg-gray-700 transition duration-300">
+                  <Calendar className="mr-2" size={18} />
                   <span>
                     {new Date(
                       showDetails.first_air_date || showDetails.release_date
@@ -173,8 +188,8 @@ const ShowPage = () => {
                   </span>
                 </div>
                 {!isMovie && (
-                  <div className="flex items-center bg-gray-800 rounded-full px-3 py-1">
-                    <Tv className="mr-1" size={16} />
+                  <div className="flex items-center bg-gray-800/60 backdrop-blur rounded-full px-4 py-1.5 hover:bg-gray-700 transition duration-300">
+                    <Tv className="mr-2" size={18} />
                     <span>
                       {showDetails.number_of_seasons} Season
                       {showDetails.number_of_seasons !== 1 ? "s" : ""}
@@ -182,55 +197,53 @@ const ShowPage = () => {
                   </div>
                 )}
                 {!isMovie && (
-                  <div className="flex items-center bg-gray-800 rounded-full px-3 py-1">
-                    <Film className="mr-1" size={16} />
+                  <div className="flex items-center bg-gray-800/60 backdrop-blur rounded-full px-4 py-1.5 hover:bg-gray-700 transition duration-300">
+                    <Film className="mr-2" size={18} />
                     <span>
                       {showDetails.number_of_episodes} Episode
                       {showDetails.number_of_episodes !== 1 ? "s" : ""}
                     </span>
                   </div>
                 )}
+              </div>
+              <div className="w-full my-6 max-w-64 flex gap-4">
+                {type === "movie" && (
+                  <a
+                    href={`https://vidsrc.xyz/embed/movie/${showDetails.imdb_id}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="bg-red-600 hover:bg-red-700 text-white px-8 py-2.5 rounded-full flex items-center gap-3 transition duration-300 ease-in-out shadow-lg hover:shadow-red-500/20 group"
+                  >
+                    <Film size={20} className="group-hover:scale-110 transition-transform" />
+                    Watch Now
+                  </a>
+                )}
                 <button
                   onClick={() => toggleBookmark(mapShowDetailsToShow(showDetails))}
-                  className="bg-blue-600 hover:bg-blue-700 rounded-full p-2 transition duration-300 ease-in-out"
+                  className="bg-blue-600 hover:bg-blue-700 rounded-full p-2.5 transition duration-300 ease-in-out shadow-lg hover:shadow-blue-500/20 group"
                 >
                   <Bookmark
                     size={20}
-                    className={
+                    className={`${
                       bookmarkedShows.some((show) => show.id === showDetails.id)
                         ? "fill-current text-white"
                         : "text-white"
-                    }
+                    } group-hover:scale-110 transition-transform`}
                   />
                 </button>
               </div>
-              <p className="text-lg mb-6">{showDetails.overview}</p>
-              <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-2">Genres</h2>
-                <div className="flex flex-wrap gap-2">
-                  {showDetails.genres.map((genre) => (
-                    <span
-                      key={genre.id}
-                      className="bg-gray-800 rounded-full px-3 py-1 text-sm"
-                    >
-                      {genre.name}
-                    </span>
-                  ))}
-                </div>
+              <p className="text-lg mb-8 text-gray-300 leading-relaxed">{showDetails.overview}</p>
+              <div>
+               <ShowEp showDetails={showDetails} />
               </div>
-              <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-2">Cast</h2>
-                <div className="flex overflow-x-auto gap-4 pb-4">
+              <div className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Cast</h2>
+                <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
                   {showDetails.credits.cast
                     .slice(0, 10)
-                    .map(
-                      (actor: {
-                        id: number;
-                        name: string;
-                        character: string;
-                        profile_path: string;
-                      }) => (
-                        <div key={actor.id} className="flex-shrink-0 w-24">
+                    .map((actor) => (
+                      <div key={actor.id} className="flex-shrink-0 w-28 group">
+                        <div className="relative">
                           <Image
                             src={
                               actor.profile_path
@@ -238,17 +251,31 @@ const ShowPage = () => {
                                 : "/placeholder.png"
                             }
                             alt={actor.name}
-                            width={96}
-                            height={144}
-                            className="rounded-lg mb-2"
+                            width={112}
+                            height={168}
+                            className="rounded-lg mb-2 transition duration-300 group-hover:scale-105"
                           />
-                          <p className="text-sm font-medium">{actor.name}</p>
-                          <p className="text-xs text-gray-400">
-                            {actor.character}
-                          </p>
+                          <div className="absolute inset-0 rounded-lg bg-gradient-to-t from-gray-950/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300" />
                         </div>
-                      )
-                    )}
+                        <p className="text-sm font-medium truncate">{actor.name}</p>
+                        <p className="text-xs text-gray-400 truncate">
+                          {actor.character}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+              <div className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Genres</h2>
+                <div className="flex flex-wrap gap-2">
+                  {showDetails.genres.map((genre) => (
+                    <span
+                      key={genre.id}
+                      className="bg-gray-800/60 backdrop-blur hover:bg-gray-700 rounded-full px-4 py-1.5 text-sm transition duration-300"
+                    >
+                      {genre.name}
+                    </span>
+                  ))}
                 </div>
               </div>
               {showDetails.networks && showDetails.networks.length > 0 && (
