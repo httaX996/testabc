@@ -125,11 +125,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     setBookmarkedShows(JSON.parse(localStorage.getItem("bookmarkedShows") || "[]"));
   };
 
-  const toggleBookmark = (show: Show) => { 
+  const toggleBookmark = (show: Show) => { // Change parameter to Show object
     const updatedBookmarkedShows = bookmarkedShows.some((bookmarkedShow) => bookmarkedShow.id === show.id)
       ? bookmarkedShows.filter((bookmarkedShow) => bookmarkedShow.id !== show.id)
-      : [...bookmarkedShows, {...show, media_type: show.media_type !== "movie" ? "tv" : "movie"}];
-
+      : [...bookmarkedShows, {...show , media_type: show.media_type as "movie" | "tv"}];
     setBookmarkedShows(updatedBookmarkedShows);
     localStorage.setItem(
       "bookmarkedShows",
