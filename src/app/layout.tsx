@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "MovieMAX",
-  description: "MovieMAX is a web application that allows you to search for movies and TV shows.",
+  title: "CKCineMAX",
+  description: "CKCineMAX is a web application that allows you to search for movies and TV shows.",
 };
 
 export default function RootLayout({
